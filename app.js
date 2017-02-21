@@ -26,10 +26,33 @@ var usb = new Product('Tentacle USB', 'img/usb.gif');
 var waterCan = new Product('Water Can', 'img/water-can.jpg');
 var wineGlass = new Product('Wine Glass', 'img/wine-glass.jpg');
 
+var allProducts = [bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass];
 
+var randomProduct = function () {
+  return Math.floor(Math.random() * allProducts.length);
+};
 
+var chosenProds = [];
+var choosingRandomProduct = function (){
+  for (var i = 0; i < 3; i++) {
+    chosenProds.push(randomProduct());
+  }
+  if (chosenProds[0] === chosenProds[1] || chosenProds[0] === chosenProds[2] || chosenProds[1] === chosenProds[2]){
+    chosenProds = [];
+    choosingRandomProduct();
+  }
+};
+choosingRandomProduct();
+console.log(chosenProds);
 
+var displayImage = function (){
+  var displayImageOne = document.getElementById('image-one');
+  displayImageOne.src = allProducts[chosenProds[0]].productPath;
 
-var imageOne = document.getElementById('image-one');
-var imageTwo = document.getElementById('image-two');
-var imageThree = documents.getElementById('image-three');
+  var displayImageTwo = document.getElementById('image-two');
+  displayImageTwo.src = allProducts[chosenProds[1]].productPath;
+
+  var displayImageThree = document.getElementById('image-three');
+  displayImageThree.src = allProducts[chosenProds[2]].productPath;
+};
+displayImage();
