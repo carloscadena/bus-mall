@@ -1,10 +1,15 @@
 'use strict';
 
+var totalClicks = 0;
+var displayImageOne = document.getElementById('image-one');
+var displayImageTwo = document.getElementById('image-two');
+var displayImageThree = document.getElementById('image-three');
+
 function Product(productName, productPath, uniqueId) {
   this.productName = productName;
   this.productPath = productPath;
   this.uniqueId = uniqueId;
-  this.totalClicks = 0;
+  this.timesPicked = 0;
   this.timesShown = 0;
 }
 
@@ -36,7 +41,9 @@ var randomProduct = function () {
 };
 
 var chosenProds = [];
+var lastThreePicked = [];
 var choosingRandomProduct = function (){
+  chosenProds = [];
   for (var i = 0; i < 3; i++) {
     chosenProds.push(randomProduct());
   }
@@ -44,35 +51,67 @@ var choosingRandomProduct = function (){
     chosenProds = [];
     choosingRandomProduct();
   }
+  if (lastThreePicked.includes(chosenProds[0]) || lastThreePicked.includes(chosenProds[1]) || lastThreePicked.includes(chosenProds[2])){
+    chosenProds = [];
+    choosingRandomProduct();
+  }
+  lastThreePicked = chosenProds;
 };
-choosingRandomProduct();
-console.log(chosenProds);
 
 var displayImage = function (){
-  var displayImageOne = document.getElementById('image-one');
+  choosingRandomProduct();
   displayImageOne.src = allProducts[chosenProds[0]].productPath;
-  displayImageOne.setAttribute('id', allProducts[chosenProds[0]].uniqueId);
+  displayImageOne.setAttribute('alt', allProducts[chosenProds[0]].uniqueId);
   displayImageOne.addEventListener('click', handleClick);
+  allProducts[chosenProds[0]].timesShown++;
 
-  var displayImageTwo = document.getElementById('image-two');
   displayImageTwo.src = allProducts[chosenProds[1]].productPath;
-  displayImageTwo.setAttribute('id', allProducts[chosenProds[1]].uniqueId);
+  displayImageTwo.setAttribute('alt', allProducts[chosenProds[1]].uniqueId);
   displayImageTwo.addEventListener('click', handleClick);
+  allProducts[chosenProds[1]].timesShown++;
 
-  var displayImageThree = document.getElementById('image-three');
   displayImageThree.src = allProducts[chosenProds[2]].productPath;
-  displayImageThree.setAttribute('id', allProducts[chosenProds[2]].uniqueId);
+  displayImageThree.setAttribute('alt', allProducts[chosenProds[2]].uniqueId);
   displayImageThree.addEventListener('click', handleClick);
+  allProducts[chosenProds[2]].timesShown++;
+};
+
+var displayResults = function(){
+  var theResultsList = document.getElementById('something');
+  for (var i = 0; i < allProducts.length; i++) {
+    var theContent = allProducts[i].productName + ': ' + allProducts[i].timesPicked + '. ' + 'Percentage of time picked when shown: %' + (100 * ((allProducts[i].timesPicked) / (allProducts[i].timesShown)));
+    var theResultsData = document.createElement('li');
+    theResultsData.textContent = theContent;
+    theResultsList.appendChild(theResultsData);
+  }
 };
 
 function handleClick(event){
-  var latestClick = event.currentTarget.id;
+  event.preventDefault();
+  event.stopPropagation();
+  totalClicks++;
+  var latestClick = event.target.id;
   // debugger;
   console.log(latestClick);
   console.log(event);
+  if (event.target.id === 'image-one'){
+    console.log(chosenProds[0]);
+    allProducts[chosenProds[0]].timesPicked++;
+  } else if (event.target.id === 'image-two'){
+    console.log(chosenProds[1]);
+    allProducts[chosenProds[1]].timesPicked++;
+  } else {
+    allProducts[chosenProds[2]].timesPicked++;
+    console.log(chosenProds[2]);
+  }
 
-  for (var i = 0; i < allProducts.length; i++) {
-    allProducts[chosenProds[0]].uniqueId
+  if (totalClicks < 25){
+    displayImage();
+  } else {
+    displayResults();
+    displayImageOne.removeEventListener('click', handleClick);
+    displayImageTwo.removeEventListener('click', handleClick);
+    displayImageThree.removeEventListener('click', handleClick);
   }
 }
 
