@@ -4,7 +4,6 @@ var totalClicks = 0;
 var displayImageOne = document.getElementById('image-one');
 var displayImageTwo = document.getElementById('image-two');
 var displayImageThree = document.getElementById('image-three');
-var context = document.getElementById('chart').getContext('2d');
 
 function Product(productName, productPath, uniqueId) {
   this.productName = productName;
@@ -35,7 +34,16 @@ var usb = new Product('Tentacle USB', 'img/usb.gif', 'wiggleusb');
 var waterCan = new Product('Water Can', 'img/water-can.jpg', 'sillycan');
 var wineGlass = new Product('Wine Glass', 'img/wine-glass.jpg', 'oddglass');
 
-var allProducts = [bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass];
+var allProducts = [];
+
+function loadPreviousStorage(){
+  if(typeof(localStorage.allProducts) !== 'undefined'){
+    allProducts = JSON.parse(localStorage.allProducts);
+  } else {
+    allProducts = [bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass];
+  }
+}
+loadPreviousStorage();
 
 var randomProduct = function () {
   return Math.floor(Math.random() * allProducts.length);
@@ -80,37 +88,16 @@ var displayImage = function (){
 var displayResults = function(){
   var names = [];
   var data = [];
-  // var theResultsList = document.getElementById('something');
+  var theResultsList = document.getElementById('something');
   for (var i = 0; i < allProducts.length; i++) {
 
     names.push(allProducts[i].productName);
     data.push(allProducts[i].timesPicked);
-    // var theContent = allProducts[i].productName + ': ' + allProducts[i].timesPicked + '. ' + 'Percentage of time picked when shown: %' + (100 * ((allProducts[i].timesPicked) / (allProducts[i].timesShown)));
-    // var theResultsData = document.createElement('li');
-    // theResultsData.textContent = theContent;
-    // theResultsList.appendChild(theResultsData);
+    var theContent = allProducts[i].productName + ': ' + allProducts[i].timesPicked + '. ' + 'Percentage of time picked when shown: %' + (100 * ((allProducts[i].timesPicked) / (allProducts[i].timesShown)));
+    var theResultsData = document.createElement('li');
+    theResultsData.textContent = theContent;
+
   }
-  var chartData = {
-    type: 'bar',
-    data: {
-      labels: names,
-      datasets: [{
-        label: 'Times picked',
-        data: data,
-        // backgroundColor:
-      }],
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
-  };
-  var myChart = new Chart(context, chartData);
 };
 
 function handleClick(event){
@@ -139,6 +126,14 @@ function handleClick(event){
     displayImageOne.removeEventListener('click', handleClick);
     displayImageTwo.removeEventListener('click', handleClick);
     displayImageThree.removeEventListener('click', handleClick);
+
+    function saveProductsToLocalStorage(allProducts){
+      localStorage.allProducts = JSON.stringify(allProducts);
+      console.log('Saves to localStorage!');
+    }
+    saveProductsToLocalStorage(allProducts);
+    var showCharts = document.getElementById('add-results');
+    showCharts.setAttribute('style', 'display: inline');
   }
 }
 
