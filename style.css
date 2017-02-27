@@ -1,10 +1,16 @@
 html {
   text-align: center;
+  background-color: #EDEBD6;
 }
 
 img {
   width: 25%;
   padding: 30px;
+}
+
+h1 {
+  color: #B8965A;
+  border: 10px;
 }
 
 canvas {
@@ -16,4 +22,18 @@ canvas {
   display: none;
   font-size: 30px;
   color: black;
+}
+#image-one {
+  border-color: #AAA8A1;
+  border-width: 10px;
+}
+
+#image-two {
+  border-color: #293037;
+  border-width: 10px
+}
+
+#image-three {
+  border-color: #927B57;
+  border-width: 10px;
 }
