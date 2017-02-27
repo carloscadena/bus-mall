@@ -23,6 +23,9 @@ function allProductNames(products){
 
 var clickData = allProductClicks(allProducts);
 var nameData = allProductNames(allProducts);
+var colors = [
+  'rgba(255, 0, 0, 0.5)', 'rgba(255, 50, 0, 0.5)', 'rgba(255, 100, 0, 0.5)', 'rgba(255, 150, 0, 0.5)', 'rgba(255, 200, 0, 0.5)', 'rgba(0, 255, 0, 0.5)', 'rgba(0, 255, 50, 0.5)', 'rgba(0, 255, 100, 0.5)', 'rgba(0, 255, 150, 0.5)', 'rgba(0, 255, 200, 0.5)', 'rgba(0, 0, 255, 0.5)', 'rgba(50, 0, 255, 0.5)', 'rgba(100, 0, 255, 0.5)', 'rgba(150, 0, 255, 0.5)', 'rgba(200, 0, 255, 0.5)', 'rgba(255, 100, 100, 0.5)', 'rgba(100, 255, 100, 0.5)', 'rgba(100, 100, 255, 0.5)', 'rgba(2, 96, 247, 0.5)', 'rgba(40, 100, 140, 0.5)'
+];
 
 var chartData = {
   type: 'bar',
@@ -31,7 +34,7 @@ var chartData = {
     datasets: [{
       label: 'Times picked',
       data: clickData,
-      // backgroundColor:
+      backgroundColor: colors
     }],
   },
   options: {
